@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "typefully": {
+      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
+      "args": ["-m", "typefully_mcp_server.server"],
+      "env": {
+        "TYPEFULLY_API_KEY": "your_typefully_api_key_here"
+      },
+      "cwd": "/path/to/your/typefully-mcp-server"
+    }
+  }
+} 
