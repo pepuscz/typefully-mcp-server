@@ -21,11 +21,22 @@ wheels/
 *.egg
 MANIFEST
 
-# Virtual Environment
+# Virtual environments
 venv/
-ENV/
 env/
-.venv
+ENV/
+.venv/
+.env/
+
+# Environment files
+.env
+*.env
+env.example
+
+# API Keys and sensitive configs
+cursor_mcp_config.json
+*config*.json
+!*config*.example.json
 
 # IDE
 .vscode/
@@ -34,34 +45,27 @@ env/
 *.swo
 *~
 
-# Environment variables (IMPORTANT: Contains API keys!)
-.env
-.env.local
-.env.*.local
-
-# Configuration files with real credentials
-cursor_mcp_config.json
-*config.json
-!*config.example.json
-
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.nox/
 
 # Logs
 *.log
+logs/
 
-# Temporary files
-*.tmp
-*.temp
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+htmlcov/
 
-# Local configuration
-config.local.json
-settings.local.json 
+# Personal/local files
+test_*.py
+!test_read_api.py
+!test_mcp_tools.py
+!test_mcp_direct.py 

@@ -15,8 +15,10 @@ This guide will help you configure the Typefully MCP server to work with Cursor.
 The MCP configuration location depends on your operating system:
 
 - **macOS**: `~/Library/Application Support/Cursor/User/globalStorage/mcp-config.json`
-- **Windows**: `%APPDATA%\Cursor\User\globalStorage\mcp-config.json`
+- **Windows**: `%APPDATA%\Cursor\User\globalStorage\mcp-config.json`  
 - **Linux**: `~/.config/Cursor/User/globalStorage/mcp-config.json`
+
+**Note**: These paths are for newer versions of Cursor. If the file doesn't exist, create the directory structure first.
 
 ### Step 2: Create or Update MCP Configuration
 
@@ -53,15 +55,15 @@ cd /path/to/your/typefully-mcp-server
 
 # Create virtual environment if not exists
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e .
 
-# Create Cursor config directory if it doesn't exist
+# Create Cursor config directory if it doesn't exist (macOS/Linux)
 mkdir -p ~/Library/Application\ Support/Cursor/User/globalStorage
 
 # Copy and customize the example configuration
 cp cursor-mcp-config.example.json ~/Library/Application\ Support/Cursor/User/globalStorage/mcp-config.json
-# Edit the file to update paths and API key
+# Edit the file to update the absolute paths and API key
 ```
 
 ### Step 4: Restart Cursor

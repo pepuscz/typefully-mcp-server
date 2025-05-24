@@ -21,7 +21,7 @@ A Model Context Protocol (MCP) server that provides integration with the Typeful
 - A Typefully account with API access
 - Your Typefully API key (get it from Settings > Integrations in Typefully)
 
-### Install from source
+### Installation
 
 1. Clone this repository:
 ```bash
@@ -29,14 +29,11 @@ git clone <repository-url>
 cd typefully-mcp-server
 ```
 
-2. Install the package:
+2. Create virtual environment and install:
 ```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e .
-```
-
-Or using requirements.txt:
-```bash
-pip install -r requirements.txt
 ```
 
 ## Configuration
@@ -52,21 +49,33 @@ cp env.example .env
 
 ### MCP Configuration
 
-Add the server to your MCP configuration file (e.g., for Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_config.json`):
+Add the server to your MCP configuration file:
+
+**For Claude Desktop:**
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+**For Cursor:**
+- macOS: `~/Library/Application Support/Cursor/User/globalStorage/mcp-config.json`
+- Windows: `%APPDATA%\Cursor\User\globalStorage\mcp-config.json`
+- Linux: `~/.config/Cursor/User/globalStorage/mcp-config.json`
 
 ```json
 {
   "mcpServers": {
     "typefully": {
-      "command": "python",
+      "command": "/absolute/path/to/your/venv/bin/python",
       "args": ["-m", "typefully_mcp_server.server"],
       "env": {
         "TYPEFULLY_API_KEY": "your_api_key_here"
-      }
+      },
+      "cwd": "/absolute/path/to/typefully-mcp-server"
     }
   }
 }
 ```
+
+**Important**: Use absolute paths for both the Python executable and working directory for better reliability.
 
 ## Usage
 
@@ -115,11 +124,27 @@ Show me all my recently published tweets
 
 ## Testing
 
-A test script is included to verify the server functionality:
+Several test scripts are included to verify the server functionality:
 
 ```bash
-# Make sure you have your .env file configured
-python test_server.py
+# Test basic server functionality
+python test_read_api.py
+
+# Test MCP tools directly  
+python test_mcp_tools.py
+
+# Test server startup and tool registration
+python test_mcp_direct.py
+```
+
+You can also test the server directly:
+
+```bash
+# Activate your virtual environment
+source venv/bin/activate
+
+# Test server startup
+python -m typefully_mcp_server.server
 ```
 
 ## Development
@@ -131,15 +156,24 @@ typefully-mcp-server/
 ├── src/
 │   └── typefully_mcp_server/
 │       ├── __init__.py
-│       ├── server.py      # Main MCP server implementation
+│       ├── server.py      # Main MCP server implementation  
 │       ├── client.py      # Typefully API client
 │       └── types.py       # Type definitions
 ├── pyproject.toml
 ├── requirements.txt
 ├── README.md
 ├── env.example
-└── test_server.py
+├── test_read_api.py       # API functionality tests
+├── test_mcp_tools.py      # MCP tools tests
+└── test_mcp_direct.py     # Server startup tests
 ```
+
+### Recent Updates
+
+This project has been updated to use the latest MCP Python SDK (v1.9+) with proper:
+- Server initialization with `NotificationOptions`
+- Import path fixes for development and testing
+- Compatibility with current Cursor and Claude Desktop versions
 
 ### Running Tests
 

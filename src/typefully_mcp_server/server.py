@@ -7,6 +7,7 @@ from datetime import datetime
 
 from mcp.server import Server
 from mcp.server.models import InitializationOptions
+from mcp.server.lowlevel import NotificationOptions
 from mcp.types import (
     Tool,
     TextContent,
@@ -180,20 +181,23 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
         return [TextContent(type="text", text=f"❌ Error: {str(e)}")]
 
 
-async def main():
-    """Run the MCP server."""
+if __name__ == "__main__":
+    import asyncio
     from mcp.server.stdio import stdio_server
     
-    async with stdio_server() as (read_stream, write_stream):
-        await app.run(
-            read_stream,
-            write_stream,
-            InitializationOptions(
-                server_name="typefully-mcp-server",
-                server_version="0.1.0",
-            ),
-        )
-
-
-if __name__ == "__main__":
+    async def main():
+        async with stdio_server() as (read_stream, write_stream):
+            await app.run(
+                read_stream,
+                write_stream,
+                InitializationOptions(
+                    server_name="typefully-mcp-server",
+                    server_version="0.1.0",
+                    capabilities=app.get_capabilities(
+                        notification_options=NotificationOptions(),
+                        experimental_capabilities={},
+                    ),
+                ),
+            )
+    
     asyncio.run(main()) 

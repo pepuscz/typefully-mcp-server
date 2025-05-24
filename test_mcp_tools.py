@@ -3,17 +3,32 @@
 
 import asyncio
 import os
-from dotenv import load_dotenv
-from src.typefully_mcp_server.server import call_tool
+import sys
+from pathlib import Path
 
-# Load environment variables
-load_dotenv()
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+try:
+    from dotenv import load_dotenv
+    # Load environment variables
+    load_dotenv()
+except ImportError:
+    print("dotenv not available, skipping environment loading")
+
+from typefully_mcp_server.server import app
 
 
 async def test_mcp_tools():
     """Test MCP server tools directly."""
     print("🔧 Testing MCP Server Tools")
     print("=" * 50)
+    
+    # Set environment variable for testing
+    os.environ["TYPEFULLY_API_KEY"] = "1pfoHORJ6dQZ985w"
+    
+    # Import the call_tool handler function 
+    from typefully_mcp_server.server import call_tool
     
     # Test get_scheduled_drafts tool
     print("\n📅 Testing get_scheduled_drafts tool...")

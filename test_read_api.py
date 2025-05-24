@@ -3,11 +3,20 @@
 
 import asyncio
 import os
-from dotenv import load_dotenv
-from src.typefully_mcp_server.client import TypefullyClient
+import sys
+from pathlib import Path
 
-# Load environment variables
-load_dotenv()
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+try:
+    from dotenv import load_dotenv
+    # Load environment variables
+    load_dotenv()
+except ImportError:
+    print("dotenv not available, skipping environment loading")
+
+from typefully_mcp_server.client import TypefullyClient
 
 
 async def test_read_operations():
