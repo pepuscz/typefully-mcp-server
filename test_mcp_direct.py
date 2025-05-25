@@ -17,7 +17,15 @@ async def test_server():
     print("=" * 50)
     
     # Set environment variable
-    os.environ["TYPEFULLY_API_KEY"] = "1pfoHORJ6dQZ985w"
+    api_key = os.getenv("TYPEFULLY_API_KEY")
+    if not api_key:
+        print("❌ TYPEFULLY_API_KEY environment variable not set")
+        print("Please set it with one of these methods:")
+        print("  1. export TYPEFULLY_API_KEY=your_api_key_here")
+        print("  2. Create a .env file with: TYPEFULLY_API_KEY=your_api_key_here")
+        print("  3. Copy env.example to .env and edit it")
+        print("\n💡 Get your API key from Typefully Settings > Integrations")
+        return False
     
     try:
         # Create server instance
