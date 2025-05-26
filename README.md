@@ -29,14 +29,15 @@ git clone <repository-url>
 cd typefully-mcp-server
 ```
 
-2. Install the package:
+2. Create and activate a virtual environment:
 ```bash
-pip install -e .
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-Or using requirements.txt:
+3. Install the package:
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ## Configuration
@@ -47,29 +48,12 @@ This server supports secure API key storage using macOS Keychain. You have two o
 
 #### Option 1: macOS Keychain (Recommended) 🔐
 
-Store your API key securely using the **Keychain Access** app:
+Store your API key securely in the macOS System keychain:
+- **Service**: `typefully-mcp-server`
+- **Account**: `api_key`
+- **Password**: Your Typefully API key
 
-1. **Add your API key to Keychain Access:**
-   - Open **Keychain Access** app (Applications > Utilities)
-   - **Important**: Make sure you're adding to the **System** keychain (not iCloud keychain)
-   - Click **File > New Password Item**
-   - Set **Keychain Item Name**: `typefully-mcp-server`
-   - Set **Account Name**: `api_key`
-   - Set **Password**: `your_actual_api_key_here`
-   - **Keychain**: Select **System** (not iCloud)
-   - Click **Add**
-
-2. **Configure Access Control:**
-   - Double-click the newly created keychain entry
-   - Go to the **Access Control** tab
-   - Choose **"Allow access by all applications"** for simplest setup
-   - Or add specific Python executable: `/opt/homebrew/opt/python@3.13/bin/python3.13`
-   - Click **Save Changes**
-
-**Important Notes:**
-- ⚠️ **Must use System keychain** - iCloud keychain won't work with the MCP server
-- ⚠️ **Access control required** - You'll need to allow Python applications to access the key
-- 🔒 **Security consideration** - "Allow all applications" lets any Python script access this key
+For detailed keychain setup instructions, see [CURSOR_SETUP.md](CURSOR_SETUP.md).
 
 
 
@@ -81,30 +65,17 @@ You can set the API key as an environment variable or include it directly in you
 
 ### MCP Configuration
 
-Add the server to your MCP configuration file. **With keychain storage, you don't need to include the API key in the config:**
+For detailed MCP client setup instructions (Cursor, Claude Desktop, etc.), see [CURSOR_SETUP.md](CURSOR_SETUP.md).
+
+Basic MCP configuration example:
 
 ```json
 {
   "mcpServers": {
     "typefully": {
-      "command": "python",
-      "args": ["-m", "typefully_mcp_server.server"]
-    }
-  }
-}
-```
-
-If using environment variables, include the key:
-
-```json
-{
-  "mcpServers": {
-    "typefully": {
-      "command": "python",
+      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
       "args": ["-m", "typefully_mcp_server.server"],
-      "env": {
-        "TYPEFULLY_API_KEY": "your_api_key_here"
-      }
+      "cwd": "/path/to/your/typefully-mcp-server"
     }
   }
 }
@@ -160,6 +131,9 @@ Show me all my recently published tweets
 A test script is included to verify the server functionality:
 
 ```bash
+# Make sure your virtual environment is activated
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Test the API connectivity (requires API key configured)
 python test_read_api.py
 ```
@@ -186,6 +160,9 @@ typefully-mcp-server/
 ### Running Tests
 
 ```bash
+# Make sure your virtual environment is activated
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Install development dependencies
 pip install -e ".[dev]"
 

@@ -91,6 +91,10 @@ Run these commands to set up the configuration:
 # Navigate to project directory
 cd /path/to/your/typefully-mcp-server
 
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Install dependencies (including keyring for macOS Keychain support)
 pip install -e .
 
@@ -141,11 +145,11 @@ Try asking Cursor to:
 
 **3. API errors**
 - Verify your API key is correct
-- Test the server manually: `python test_read_api.py`
+- Test the server manually: `source venv/bin/activate && python test_read_api.py`
 
 **4. Server not starting**
 - Check the logs in Cursor
-- Test server directly: `python -m typefully_mcp_server.server`
+- Test server directly: `source venv/bin/activate && python -m typefully_mcp_server.server`
 
 ### Manual Configuration Check:
 
