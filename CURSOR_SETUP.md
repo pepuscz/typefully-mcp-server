@@ -4,7 +4,7 @@ This guide will help you configure the Typefully MCP server to work with Cursor.
 
 ## 📋 Prerequisites
 
-✅ Typefully MCP server installed and tested
+✅ Typefully MCP server installed (see [README.md](README.md) for installation)
 ✅ Cursor installed
 ✅ Typefully API key (get it from Settings > Integrations in Typefully)
 
@@ -36,82 +36,41 @@ You have two options for storing your Typefully API key:
 
 You can include the API key directly in the Cursor configuration (less secure but simpler).
 
-### Step 2: Locate Cursor Configuration Directory
+### Step 2: Add MCP Server in Cursor Settings
 
-The MCP configuration location depends on your operating system:
+Instead of manually editing config files, use Cursor's built-in MCP settings:
 
-- **macOS**: `~/Library/Application Support/Cursor/User/globalStorage/mcp-config.json`
-- **Windows**: `%APPDATA%\Cursor\User\globalStorage\mcp-config.json`  
-- **Linux**: `~/.config/Cursor/User/globalStorage/mcp-config.json`
+1. **Open Cursor Settings:**
+   - Press `Cmd+,` (macOS) or `Ctrl+,` (Windows/Linux)
+   - Or go to **Cursor > Settings**
 
-**Note**: These paths are for newer versions of Cursor. If the file doesn't exist, create the directory structure first.
+2. **Navigate to MCP Settings:**
+   - Search for "MCP" in the settings search bar
+   - Or look for **Extensions > MCP** in the settings sidebar
 
-### Step 3: Create or Update MCP Configuration
+3. **Add Typefully MCP Server:**
+   - Click **"Add MCP Server"** or **"+"**
+   - Fill in the configuration:
+     - **Name**: `typefully`
+     - **Command**: `/path/to/your/typefully-mcp-server/venv/bin/python`
+     - **Args**: `-m typefully_mcp_server.server`
+     - **Working Directory**: `/path/to/your/typefully-mcp-server`
+     - **Environment Variables**: (only if using Option B - leave empty for keychain)
 
-If the file doesn't exist, create it. If it exists, add our server configuration to the existing `mcpServers` object.
+4. **Replace paths with your actual project location:**
+   ```bash
+   # First, get your actual project path:
+   cd /path/to/your/typefully-mcp-server
+   pwd  # Copy this output for the paths above
+   ```
 
-#### If using Keychain (Option A):
-
-```json
-{
-  "mcpServers": {
-    "typefully": {
-      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
-      "args": ["-m", "typefully_mcp_server.server"],
-      "cwd": "/path/to/your/typefully-mcp-server"
-    }
-  }
-}
-```
-
-#### If using Environment Variables (Option B):
-
-```json
-{
-  "mcpServers": {
-    "typefully": {
-      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
-      "args": ["-m", "typefully_mcp_server.server"],
-      "env": {
-        "TYPEFULLY_API_KEY": "your_typefully_api_key_here"
-      },
-      "cwd": "/path/to/your/typefully-mcp-server"
-    }
-  }
-}
-```
-
-**Important**: Replace `/path/to/your/typefully-mcp-server/` with your actual project path.
-
-### Step 4: Quick Setup Commands
-
-Run these commands to set up the configuration:
-
-```bash
-# Navigate to project directory
-cd /path/to/your/typefully-mcp-server
-
-# Create and activate virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies (including keyring for macOS Keychain support)
-pip install -e .
-
-# Create Cursor config directory if it doesn't exist (macOS)
-mkdir -p ~/Library/Application\ Support/Cursor/User/globalStorage
-
-# Create the MCP configuration file
-# Edit the file with your actual project path
-```
-
-### Step 5: Restart Cursor
+### Step 3: Restart Cursor
 
 After adding the configuration, restart Cursor for the changes to take effect.
 
 ## 🧪 Testing the Integration
 
-### Step 6: Verify MCP Server in Cursor
+### Step 4: Verify MCP Server in Cursor
 
 1. Open Cursor
 2. Open the command palette (Cmd+Shift+P on macOS)
@@ -121,7 +80,7 @@ After adding the configuration, restart Cursor for the changes to take effect.
    - `get_scheduled_drafts` 
    - `get_published_drafts`
 
-### Step 7: Test with Natural Language
+### Step 5: Test with Natural Language
 
 Try asking Cursor to:
 
