@@ -6,11 +6,37 @@ This guide will help you configure the Typefully MCP server to work with Cursor.
 
 ✅ Typefully MCP server installed and tested
 ✅ Cursor installed
-✅ Typefully API key configured
+✅ Typefully API key (get it from Settings > Integrations in Typefully)
 
 ## 🔧 Configuration Steps
 
-### Step 1: Locate Cursor Configuration Directory
+### Step 1: Configure API Key Storage
+
+You have two options for storing your Typefully API key:
+
+#### Option A: macOS Keychain (Recommended) 🔐
+
+1. **Add your API key to Keychain Access:**
+   - Open **Keychain Access** app (Applications > Utilities)
+   - **Important**: Make sure you're adding to the **System** keychain (not iCloud keychain)
+   - Click **File > New Password Item**
+   - Set **Keychain Item Name**: `typefully-mcp-server`
+   - Set **Account Name**: `api_key`
+   - Set **Password**: `your_actual_api_key_here`
+   - **Keychain**: Select **System** (not iCloud)
+   - Click **Add**
+
+2. **Configure Access Control:**
+   - Double-click the newly created keychain entry
+   - Go to the **Access Control** tab
+   - Choose **"Allow access by all applications"** for simplest setup
+   - Click **Save Changes**
+
+#### Option B: Environment Variables
+
+You can include the API key directly in the Cursor configuration (less secure but simpler).
+
+### Step 2: Locate Cursor Configuration Directory
 
 The MCP configuration location depends on your operating system:
 
@@ -20,11 +46,25 @@ The MCP configuration location depends on your operating system:
 
 **Note**: These paths are for newer versions of Cursor. If the file doesn't exist, create the directory structure first.
 
-### Step 2: Create or Update MCP Configuration
+### Step 3: Create or Update MCP Configuration
 
 If the file doesn't exist, create it. If it exists, add our server configuration to the existing `mcpServers` object.
 
-Copy the contents from `cursor-mcp-config.example.json` and update the paths:
+#### If using Keychain (Option A):
+
+```json
+{
+  "mcpServers": {
+    "typefully": {
+      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
+      "args": ["-m", "typefully_mcp_server.server"],
+      "cwd": "/path/to/your/typefully-mcp-server"
+    }
+  }
+}
+```
+
+#### If using Environment Variables (Option B):
 
 ```json
 {
@@ -41,38 +81,33 @@ Copy the contents from `cursor-mcp-config.example.json` and update the paths:
 }
 ```
 
-**Important**: Replace the following placeholders:
-- `/path/to/your/typefully-mcp-server/` with your actual project path
-- `your_typefully_api_key_here` with your actual Typefully API key
+**Important**: Replace `/path/to/your/typefully-mcp-server/` with your actual project path.
 
-### Step 3: Quick Setup Commands
+### Step 4: Quick Setup Commands
 
-Run these commands to set up the configuration (update paths as needed):
+Run these commands to set up the configuration:
 
 ```bash
 # Navigate to project directory
 cd /path/to/your/typefully-mcp-server
 
-# Create virtual environment if not exists
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Install dependencies (including keyring for macOS Keychain support)
 pip install -e .
 
-# Create Cursor config directory if it doesn't exist (macOS/Linux)
+# Create Cursor config directory if it doesn't exist (macOS)
 mkdir -p ~/Library/Application\ Support/Cursor/User/globalStorage
 
-# Copy and customize the example configuration
-cp cursor-mcp-config.example.json ~/Library/Application\ Support/Cursor/User/globalStorage/mcp-config.json
-# Edit the file to update the absolute paths and API key
+# Create the MCP configuration file
+# Edit the file with your actual project path
 ```
 
-### Step 4: Restart Cursor
+### Step 5: Restart Cursor
 
 After adding the configuration, restart Cursor for the changes to take effect.
 
 ## 🧪 Testing the Integration
 
-### Step 5: Verify MCP Server in Cursor
+### Step 6: Verify MCP Server in Cursor
 
 1. Open Cursor
 2. Open the command palette (Cmd+Shift+P on macOS)
@@ -82,7 +117,7 @@ After adding the configuration, restart Cursor for the changes to take effect.
    - `get_scheduled_drafts` 
    - `get_published_drafts`
 
-### Step 6: Test with Natural Language
+### Step 7: Test with Natural Language
 
 Try asking Cursor to:
 
@@ -106,7 +141,7 @@ Try asking Cursor to:
 
 **3. API errors**
 - Verify your API key is correct
-- Test the server manually: `python test_mcp_tools.py`
+- Test the server manually: `python test_read_api.py`
 
 **4. Server not starting**
 - Check the logs in Cursor

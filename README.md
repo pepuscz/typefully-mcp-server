@@ -56,11 +56,25 @@ Store your API key securely using the **Keychain Access** app:
 
 2. **Add your API key to Keychain Access:**
    - Open **Keychain Access** app (Applications > Utilities)
+   - **Important**: Make sure you're adding to the **System** keychain (not iCloud keychain)
    - Click **File > New Password Item**
    - Set **Keychain Item Name**: `typefully-mcp-server`
    - Set **Account Name**: `api_key`
    - Set **Password**: `your_actual_api_key_here`
+   - **Keychain**: Select **System** (not iCloud)
    - Click **Add**
+
+3. **Configure Access Control:**
+   - Double-click the newly created keychain entry
+   - Go to the **Access Control** tab
+   - Choose **"Allow access by all applications"** for simplest setup
+   - Or add specific Python executable: `/opt/homebrew/opt/python@3.13/bin/python3.13`
+   - Click **Save Changes**
+
+**Important Notes:**
+- ⚠️ **Must use System keychain** - iCloud keychain won't work with the MCP server
+- ⚠️ **Access control required** - You'll need to allow Python applications to access the key
+- 🔒 **Security consideration** - "Allow all applications" lets any Python script access this key
 
 **Benefits:**
 - ✅ **Encrypted storage** - Keys are encrypted by macOS
@@ -70,12 +84,7 @@ Store your API key securely using the **Keychain Access** app:
 
 #### Option 2: Environment Variables
 
-Create a `.env` file in your project root (you can copy from `env.example`):
-
-```bash
-cp env.example .env
-# Edit .env and add your API key
-```
+You can set the API key as an environment variable or include it directly in your MCP configuration.
 
 **Note:** Environment variables take priority over keychain storage for compatibility.
 
@@ -160,8 +169,8 @@ Show me all my recently published tweets
 A test script is included to verify the server functionality:
 
 ```bash
-# Make sure you have your .env file configured
-python test_server.py
+# Test the API connectivity (requires API key configured)
+python test_read_api.py
 ```
 
 ## Development
@@ -175,12 +184,12 @@ typefully-mcp-server/
 │       ├── __init__.py
 │       ├── server.py      # Main MCP server implementation
 │       ├── client.py      # Typefully API client
+│       ├── keychain.py    # Secure keychain integration
 │       └── types.py       # Type definitions
 ├── pyproject.toml
 ├── requirements.txt
 ├── README.md
-├── env.example
-└── test_server.py
+└── test_read_api.py       # Test script
 ```
 
 ### Running Tests
