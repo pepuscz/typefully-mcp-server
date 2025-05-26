@@ -76,7 +76,7 @@ async def list_tools() -> List[Tool]:
         ),
         Tool(
             name="get_scheduled_drafts",
-            description="Get recently scheduled drafts from Typefully",
+            description="Get recently scheduled drafts from Typefully with full thread viewing links",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -142,11 +142,22 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
                 
                 for i, draft in enumerate(drafts, 1):
                     result += f"**{i}. Draft ID {draft.id}**\n"
-                    result += f"   First tweet: {draft.text_first_tweet[:80]}...\n" if len(draft.text_first_tweet) > 80 else f"   First tweet: {draft.text_first_tweet}\n"
-                    result += f"   Tweets: {draft.num_tweets}\n"
+                    result += f"   First tweet: {draft.text_first_tweet}\n"
+                    result += f"   Total tweets: {draft.num_tweets}\n"
                     if draft.scheduled_date:
                         result += f"   Scheduled: {draft.scheduled_date}\n"
-                    result += f"   View: https://typefully.com/?d={draft.id}\n\n"
+                    
+                    # Enhanced viewing options
+                    if draft.num_tweets > 1:
+                        result += f"   🧵 **View full thread:** https://typefully.com/?d={draft.id}\n"
+                    else:
+                        result += f"   📝 **View tweet:** https://typefully.com/?d={draft.id}\n"
+                    result += "\n"
+                
+                # Add helpful note for threads
+                thread_count = sum(1 for draft in drafts if draft.num_tweets > 1)
+                if thread_count > 0:
+                    result += f"\n💡 **Note:** Found {thread_count} thread(s). Click the links above to view the full content on Typefully."
                 
                 return [TextContent(type="text", text=result)]
             

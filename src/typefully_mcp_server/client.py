@@ -4,6 +4,7 @@ import os
 from typing import List, Optional, Dict, Any
 import httpx
 from .types import Draft, CreateDraftRequest
+from .keychain import get_api_key
 
 
 class TypefullyClient:
@@ -15,11 +16,20 @@ class TypefullyClient:
         """Initialize the Typefully client.
         
         Args:
-            api_key: The Typefully API key. If not provided, will look for TYPEFULLY_API_KEY env var.
+            api_key: The Typefully API key. If not provided, will look for:
+                     1. TYPEFULLY_API_KEY environment variable
+                     2. macOS Keychain (if available)
         """
-        self.api_key = api_key or os.getenv("TYPEFULLY_API_KEY")
+        self.api_key = api_key or get_api_key()
         if not self.api_key:
-            raise ValueError("API key must be provided or set in TYPEFULLY_API_KEY environment variable")
+            raise ValueError(
+                "API key not found. Please either:\n"
+                "1. Set TYPEFULLY_API_KEY environment variable, or\n"
+                "2. Store in macOS Keychain using Keychain Access app:\n"
+                "   - Service: typefully-mcp-server\n"
+                "   - Account: api_key\n"
+                "   - Password: your_api_key_here"
+            )
         
         self.headers = {
             "X-API-KEY": f"Bearer {self.api_key}",
