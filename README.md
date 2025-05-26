@@ -49,12 +49,7 @@ This server supports secure API key storage using macOS Keychain. You have two o
 
 Store your API key securely using the **Keychain Access** app:
 
-1. **Install keyring dependency:**
-   ```bash
-   pip install keyring
-   ```
-
-2. **Add your API key to Keychain Access:**
+1. **Add your API key to Keychain Access:**
    - Open **Keychain Access** app (Applications > Utilities)
    - **Important**: Make sure you're adding to the **System** keychain (not iCloud keychain)
    - Click **File > New Password Item**
@@ -64,7 +59,7 @@ Store your API key securely using the **Keychain Access** app:
    - **Keychain**: Select **System** (not iCloud)
    - Click **Add**
 
-3. **Configure Access Control:**
+2. **Configure Access Control:**
    - Double-click the newly created keychain entry
    - Go to the **Access Control** tab
    - Choose **"Allow access by all applications"** for simplest setup
@@ -76,11 +71,7 @@ Store your API key securely using the **Keychain Access** app:
 - ⚠️ **Access control required** - You'll need to allow Python applications to access the key
 - 🔒 **Security consideration** - "Allow all applications" lets any Python script access this key
 
-**Benefits:**
-- ✅ **Encrypted storage** - Keys are encrypted by macOS
-- ✅ **No plaintext files** - No risk of accidental exposure
-- ✅ **User-only access** - Only your user account can access the key
-- ✅ **Automatic authentication** - Uses your macOS login
+
 
 #### Option 2: Environment Variables
 
