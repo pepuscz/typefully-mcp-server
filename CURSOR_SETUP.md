@@ -58,10 +58,13 @@ Instead of manually editing config files, use Cursor's built-in MCP settings:
 
 ```json
 {
-  "name": "typefully",
-  "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
-  "args": ["-m", "typefully_mcp_server.server"],
-  "cwd": "/path/to/your/typefully-mcp-server"
+  "mcpServers": {
+    "typefully": {
+      "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
+      "args": ["-m", "typefully_mcp_server.server"],
+      "cwd": "/path/to/your/typefully-mcp-server"
+    }
+  }
 }
 ```
 
@@ -71,12 +74,15 @@ Instead of manually editing config files, use Cursor's built-in MCP settings:
 
 ```json
 {
-  "name": "typefully",
-  "command": "/path/to/your/typefully-mcp-server/venv/bin/python", 
-  "args": ["-m", "typefully_mcp_server.server"],
-  "cwd": "/path/to/your/typefully-mcp-server",
-  "env": {
-    "TYPEFULLY_API_KEY": "your_actual_api_key_here"
+  "mcpServers": {
+    "typefully": {
+      "command": "/path/to/your/typefully-mcp-server/venv/bin/python", 
+      "args": ["-m", "typefully_mcp_server.server"],
+      "cwd": "/path/to/your/typefully-mcp-server",
+      "env": {
+        "TYPEFULLY_API_KEY": "your_actual_api_key_here"
+      }
+    }
   }
 }
 ```
