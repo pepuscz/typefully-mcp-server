@@ -50,19 +50,49 @@ Instead of manually editing config files, use Cursor's built-in MCP settings:
 
 3. **Add Typefully MCP Server:**
    - Click **"Add MCP Server"** or **"+"**
-   - Fill in the configuration:
-     - **Name**: `typefully`
-     - **Command**: `/path/to/your/typefully-mcp-server/venv/bin/python`
-     - **Args**: `-m typefully_mcp_server.server`
-     - **Working Directory**: `/path/to/your/typefully-mcp-server`
-     - **Environment Variables**: (only if using Option B - leave empty for keychain)
+   - Use one of the configurations below based on your chosen API key storage method
 
-4. **Replace paths with your actual project location:**
-   ```bash
-   # First, get your actual project path:
-   cd /path/to/your/typefully-mcp-server
-   pwd  # Copy this output for the paths above
-   ```
+## 📋 Configuration Examples
+
+### Option A: Using Keychain (Recommended)
+
+```json
+{
+  "name": "typefully",
+  "command": "/path/to/your/typefully-mcp-server/venv/bin/python",
+  "args": ["-m", "typefully_mcp_server.server"],
+  "cwd": "/path/to/your/typefully-mcp-server"
+}
+```
+
+> **Note**: No environment variables needed - the server will automatically read from macOS Keychain using the entry `typefully-mcp-server`.
+
+### Option B: Using Environment Variables
+
+```json
+{
+  "name": "typefully",
+  "command": "/path/to/your/typefully-mcp-server/venv/bin/python", 
+  "args": ["-m", "typefully_mcp_server.server"],
+  "cwd": "/path/to/your/typefully-mcp-server",
+  "env": {
+    "TYPEFULLY_API_KEY": "your_actual_api_key_here"
+  }
+}
+```
+
+> **Important**: Replace `your_actual_api_key_here` with your real Typefully API key and update the paths to match your actual project location.
+
+### 🔍 Finding Your Project Path
+
+To get the correct paths for your configuration:
+
+```bash
+# Navigate to your project directory and get the full path
+cd typefully-mcp-server  # or wherever you cloned the project
+pwd
+# Copy the output and replace "/path/to/your/typefully-mcp-server" in the config above
+```
 
 ### Step 3: Restart Cursor
 
