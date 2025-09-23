@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/pepuscz-typefully-mcp-server-badge.png)](https://mseep.ai/app/pepuscz-typefully-mcp-server)
+
 # Typefully MCP Server
 
 A Model Context Protocol (MCP) server that provides integration with the Typefully API, allowing AI assistants to create and manage drafts on Typefully.
